@@ -52,3 +52,7 @@ def test_text_without_ssn_is_unchanged():
 def test_phone_inside_longer_number_is_not_masked():
     text = "Order 1206123456789 shipped."
     assert mask_phones(text) == text
+
+def test_phone_followed_by_extra_digit_is_not_masked():
+    text = "Ref 06123456789 archived."
+    assert mask_phones(text) == text
