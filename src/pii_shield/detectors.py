@@ -50,6 +50,9 @@ def find_ssn(text):
         for m in SSN_PATTERN.finditer(text)
     ]
 
+def build_log(text):
+    entries = find_ssn(text) + find_phones(text) + find_emails(text)
+    return sorted(entries, key=lambda e: e["start"])
 
 if __name__ == "__main__":
     exemple = (

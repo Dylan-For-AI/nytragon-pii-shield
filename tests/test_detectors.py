@@ -1,4 +1,5 @@
 from pii_shield.detectors import (
+    build_log,
     find_emails,
     find_phones,
     find_ssn,
@@ -96,3 +97,12 @@ def test_find_phones_returns_type_and_positions_only():
 def test_find_ssn_returns_type_and_positions_only():
     result = find_ssn("SSN 1 85 05 78 006 084 36 ok")
     assert result == [{"type": "SSN", "start": 4, "end": 25}]
+    
+
+def test_build_log_lists_all_types_in_order_without_values():
+    text = "Jean: 1 85 05 78 006 084 36, 06 12 34 56 78, jean@example.com"
+    assert build_log(text) == [
+        {"type": "SSN", "start": 6, "end": 27},
+        {"type": "PHONE", "start": 29, "end": 43},
+        {"type": "EMAIL", "start": 45, "end": 61},
+    ]
