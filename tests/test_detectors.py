@@ -1,5 +1,4 @@
-from pii_shield.detectors import make_label, mask_emails, mask_phones, mask_ssn
-
+from pii_shield.detectors import make_label, mask_all, mask_emails, mask_phones, mask_ssn
 
 def test_masks_a_simple_email():
     result = mask_emails("Write to jean.bernard@saint-louis-clinic.fr today.")
@@ -56,3 +55,20 @@ def test_phone_inside_longer_number_is_not_masked():
 def test_phone_followed_by_extra_digit_is_not_masked():
     text = "Ref 06123456789 archived."
     assert mask_phones(text) == text
+
+def test_ssn_inside_longer_number_is_not_masked():
+    text = "Ref 9185057800608436 archived."
+    assert mask_ssn(text) == text
+
+def test_mask_all_masks_every_type():
+    text = "Jean Bernard: 1 85 05 78 006 084 36, 06 12 34 56 78, jean.bernard@saint-louis-clinic.fr"
+    expected = (
+        f"Jean Bernard: {make_label('SSN')}, {make_label('PHONE')}, {make_label('EMAIL')}"
+    )
+    assert mask_all(text) == expected
+
+def mask_all(text):
+    text = mask_ssn(text)
+    text = mask_phones(text)
+    text = mask_emails(text)
+    return text
