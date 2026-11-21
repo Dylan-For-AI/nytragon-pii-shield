@@ -1,4 +1,4 @@
-from pii_shield.detectors import make_label, mask_emails, mask_phones
+from pii_shield.detectors import make_label, mask_emails, mask_phones, mask_ssn
 
 
 def test_masks_a_simple_email():
@@ -32,4 +32,23 @@ def test_masks_french_phone_formats():
 
 def test_text_without_phone_is_unchanged():
     text = "Room 12 opens at 8 am."
+    assert mask_phones(text) == text
+
+def test_masks_french_ssn_formats():
+    numbers = [
+        "1 85 05 78 006 084 36",
+        "185057800608436",
+        "2 91 12 2A 004 012 45",
+    ]
+    for number in numbers:
+        result = mask_ssn(f"SSN: {number}.")
+        assert result == f"SSN: {make_label('SSN')}."
+
+
+def test_text_without_ssn_is_unchanged():
+    text = "Invoice 12345 dated 2026."
+    assert mask_ssn(text) == text
+
+def test_phone_inside_longer_number_is_not_masked():
+    text = "Order 1206123456789 shipped."
     assert mask_phones(text) == text
