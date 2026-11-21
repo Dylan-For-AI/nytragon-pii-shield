@@ -31,6 +31,13 @@ def mask_all(text):
     return text
 
 
+def find_emails(text):
+    return [
+        {"type": "EMAIL", "start": m.start(), "end": m.end()}
+        for m in EMAIL_PATTERN.finditer(text)
+    ]
+
+
 if __name__ == "__main__":
     exemple = (
         "Please contact Mr. Jean Bernard at his email address "

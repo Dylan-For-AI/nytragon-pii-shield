@@ -1,5 +1,4 @@
-from pii_shield.detectors import make_label, mask_all, mask_emails, mask_phones, mask_ssn
-
+from pii_shield.detectors import find_emails, make_label, mask_all, mask_emails, mask_phones, mask_ssn
 def test_masks_a_simple_email():
     result = mask_emails("Write to jean.bernard@saint-louis-clinic.fr today.")
     assert result == f"Write to {make_label('EMAIL')} today."
@@ -72,3 +71,8 @@ def mask_all(text):
     text = mask_phones(text)
     text = mask_emails(text)
     return text
+
+
+def test_find_emails_returns_type_and_positions_only():
+    result = find_emails("Write to jean@example.com now")
+    assert result == [{"type": "EMAIL", "start": 9, "end": 25}]
