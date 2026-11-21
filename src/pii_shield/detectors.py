@@ -37,6 +37,19 @@ def find_emails(text):
         for m in EMAIL_PATTERN.finditer(text)
     ]
 
+def find_phones(text):
+    return [
+        {"type": "PHONE", "start": m.start(), "end": m.end()}
+        for m in PHONE_PATTERN.finditer(text)
+    ]
+
+
+def find_ssn(text):
+    return [
+        {"type": "SSN", "start": m.start(), "end": m.end()}
+        for m in SSN_PATTERN.finditer(text)
+    ]
+
 
 if __name__ == "__main__":
     exemple = (
