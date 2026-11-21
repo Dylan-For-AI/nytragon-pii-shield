@@ -2,7 +2,7 @@ import re
 
 LABEL_FORMAT = "[{label}]"
 EMAIL_PATTERN = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
-
+PHONE_PATTERN = re.compile(r"(?<!\d)(?:\+33\s?|0)[1-9](?:[\s.-]?\d{2}){4}(?!\d)")
 
 def make_label(label):
     return LABEL_FORMAT.format(label=label)
@@ -18,3 +18,6 @@ if __name__ == "__main__":
         "jean.bernard@saint-louis-clinic.fr for follow-up."
     )
     print(mask_emails(exemple))
+
+def mask_phones(text):
+    return PHONE_PATTERN.sub(make_label("PHONE"), text)
